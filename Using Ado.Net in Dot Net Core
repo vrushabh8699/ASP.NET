@@ -1,0 +1,45 @@
+****** Only .Net Core Code **********
+
+// See https://aka.ms/new-console-template for more information
+using ADONET_USING_CORE;
+using Microsoft.Data.SqlClient;
+
+
+Console.WriteLine("Hello, World!");
+Console.WriteLine("All trainer");
+
+List<Trainer> trainers = new List<Trainer>();
+string connectionString = "server=DESKTOP-7395FUS\\SQLEXPRESS;Database=ADO;integrated security=true;encrypt=false;";
+
+SqlConnection con=new SqlConnection(connectionString);
+
+SqlCommand cmd = new SqlCommand("select * from trainer",con);
+
+con.Open();
+SqlDataReader reader=cmd.ExecuteReader();
+if (reader.HasRows)
+{
+    while (reader.Read())
+    {
+        Trainer t = new Trainer()
+        {
+            Id = (int)reader["Id"],
+            Name = reader["Name"].ToString(),
+            City = reader["City"].ToString(),
+            Experience = (int)reader["Experience"]
+        };
+        trainers.Add(t);
+    }
+}
+else
+{
+    trainers = null;
+}
+con.Close();
+foreach( var item in trainers)
+{
+    Console.WriteLine($"Id : {item.Id} name :{item.Name} city : {item.City} Experience : {item.Experience}");
+}
+
+
+Console.ReadLine();
